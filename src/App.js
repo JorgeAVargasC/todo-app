@@ -30,6 +30,21 @@ const App = () => {
         const changedTodos = todos.map(todo => todo.id === todoId ? {...todo, completed: !todo.completed} : todo)
         setTodos(changedTodos);
     }
+    
+    const todoAdd = (todo) => {
+
+        const newTodo = {
+            id: Date.now(),
+            ...todo,
+            completed: false
+        }
+
+        const changedTodos = [
+            newTodo,
+            ...todos,
+        ]
+        setTodos(changedTodos);
+    }
 
     return (
         <div className='container mt-4'>
@@ -42,7 +57,9 @@ const App = () => {
                     />
                 </div>
                 <div className='col-4'>
-                    <TodoForm/>
+                    <TodoForm
+                        todoAdd={todoAdd}
+                    />
                 </div>
             </div>
 
