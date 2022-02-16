@@ -1,16 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const initialFormValues = {
     title: '',
     description: ''
 }
 
-const TodoForm = ({ todoAdd }) => {
+const TodoForm = ({ todoAdd, todoEdit, todoUpdate, setTodoEdit }) => {
 
     const [formValues, setFormValues] = useState(initialFormValues)
     const { title, description } = formValues;
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null);
+
+    useEffect(() => {
+        if (todoEdit) {
+            setFormValues(todoEdit);
+        }else{
+            setFormValues(initialFormValues);
+        }
+
+    }, [todoEdit])
+
 
     const handleInputChange = (e) => {
 
@@ -29,14 +39,20 @@ const TodoForm = ({ todoAdd }) => {
             return;
         }
 
-        if (description.trim() === ''){
+        if (description.trim() === '') {
             setError('Debes indicar una descripción')
             return;
         }
 
-        todoAdd(formValues);
-        setFormValues(initialFormValues);
-        setSuccessMessage('Agregado con exito');
+        if (todoEdit) {
+            todoUpdate(formValues);
+            setSuccessMessage('Actualizado con exito');
+        }
+        else {
+            todoAdd(formValues);
+            setSuccessMessage('Agregado con exito');
+            setFormValues(initialFormValues);
+        }
 
         setTimeout(() => {
             setSuccessMessage(null);
@@ -47,7 +63,20 @@ const TodoForm = ({ todoAdd }) => {
 
     return (
         <div>
-            <h1>Nueva Tarea</h1>
+            <h1>{todoEdit ? 'Editar Tarea' : 'Nueva Tarea'}</h1>
+
+            {
+                todoEdit &&
+                <button
+                    onClick={() => setTodoEdit(null)}
+                    className='btn btn-sm btn-warning mb-2'
+                >
+                    Cancelar Edición
+                </button>
+
+            }
+
+
             <form onSubmit={handleSubmit}>
                 <input
                     type='text'
@@ -68,7 +97,7 @@ const TodoForm = ({ todoAdd }) => {
                 <button
                     className='btn btn-primary btn-block mt-2'
                 >
-                    Agregar Tarea
+                    {todoEdit ? 'Actualizar Tarea' : 'Agregar Tarea'}
                 </button>
             </form>
 
@@ -77,7 +106,7 @@ const TodoForm = ({ todoAdd }) => {
                     <div className='alert alert-danger mt-2'>
                         {error}
                     </div>
-                )                
+                )
             }
 
             {

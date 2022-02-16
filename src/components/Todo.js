@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Todo = ({ todo, todoDelete, todoToogleCompleted }) => {
+const Todo = ({ todo, todoDelete, todoToogleCompleted, setTodoEdit }) => {
 
     return (
 
@@ -10,7 +10,7 @@ const Todo = ({ todo, todoDelete, todoToogleCompleted }) => {
                     {todo.title}
                     <button
                         onClick={() => todoToogleCompleted(todo.id)}
-                        className={`btn btn-sm ${todo.completed ? 'btn-outline-success':'btn-success'} ml-2`}
+                        className={`btn btn-sm ${todo.completed ? 'btn-outline-success' : 'btn-success'} ml-2`}
                     >
                         {todo.completed ? 'Terminado' : 'Terminar'}
                     </button>
@@ -22,7 +22,10 @@ const Todo = ({ todo, todoDelete, todoToogleCompleted }) => {
                 <hr />
 
                 <div className='d-flex justify-content-end'>
-                    <button className='btn btn-sm btn-outline-primary mr-2'>
+                    <button
+                        onClick={() => setTodoEdit(todo)}
+                        className='btn btn-sm btn-outline-primary mr-2'
+                    >
                         Editar
                     </button>
                     <button
